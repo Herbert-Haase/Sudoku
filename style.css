@@ -38,3 +38,7 @@ div[row] {
 div:focus {
   background-color: lightgray;
 }
+
+div.wrong {
+  background-color: lightcoral;
+}

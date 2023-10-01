@@ -49,7 +49,11 @@ fields.forEach((field) => {
     if (!isNaN(Number(e.key)) && !(e.key == 0)) {
       insertIntoDOM(e.key, e.target);
       insertIntoGameTable(e.key, e.target);
-      //this.textContent
+      if (checkForSameNumber_RowCol(e.key, e.target)) {
+        e.target.classList.add("wrong");
+      } else {
+        e.target.classList.remove("wrong");
+      }
     }
   });
 });
@@ -62,4 +66,21 @@ function insertIntoGameTable(num, field) {
   let col = field.getAttribute("col");
 
   gameTable[row][col] = Number(num);
+}
+
+function checkForSameNumber_RowCol(num, field) {
+  let row = field.getAttribute("row");
+  let col = field.getAttribute("col");
+
+  let unfiltered_rows = gameTable[row];
+  let colsWithUndefind = gameTable.map((row) => row[col]);
+  let unfiltered_cols = colsWithUndefind.filter((col) => col != undefined);
+
+  let cols = unfiltered_cols.filter((item) => item == num);
+  let rows = unfiltered_rows.filter((item) => item == num);
+
+  let duplicatesRows = rows.some((item, index) => rows.indexOf(item) !== index);
+  let duplicatesCols = cols.some((item, index) => cols.indexOf(item) !== index);
+
+  return duplicatesRows || duplicatesCols;
 }
