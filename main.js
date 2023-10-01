@@ -49,7 +49,10 @@ fields.forEach((field) => {
     if (!isNaN(Number(e.key)) && !(e.key == 0)) {
       insertIntoDOM(e.key, e.target);
       insertIntoGameTable(e.key, e.target);
-      if (checkForSameNumber_RowCol(e.key, e.target)) {
+      if (
+        checkForSameNumber_RowCol(e.key, e.target) ||
+        checkForSameNumber_Cube(e.key, e.target)
+      ) {
         e.target.classList.add("wrong");
       } else {
         e.target.classList.remove("wrong");
@@ -83,4 +86,19 @@ function checkForSameNumber_RowCol(num, field) {
   let duplicatesCols = cols.some((item, index) => cols.indexOf(item) !== index);
 
   return duplicatesRows || duplicatesCols;
+}
+
+function checkForSameNumber_Cube(num, field) {
+  let cube_html = field.parentElement.childNodes;
+  let cube_array = [...cube_html];
+  let cube_numbers = cube_array
+    .map((item) => Number(item.textContent))
+    .filter((item) => typeof item == "number" && item != 0);
+
+  let cube_numbers_filtered = cube_numbers.filter((item) => item == num);
+  let duplicatesCube = cube_numbers_filtered.some(
+    (item, index) => cube_numbers_filtered.indexOf(item) !== index
+  );
+
+  return duplicatesCube;
 }
