@@ -3,7 +3,8 @@
 Online Version: https://herbert-haase.github.io/Sudoku/
 
 Ein Sudoku Spiel mit einstellbarer Schwierigkeit.
-![image](https://github.com/Herbert-Haase/Sudoku/assets/96022576/953822ba-2e14-4e50-81e7-09253eefda27)
+![Sudoku Board](https://github.com/Herbert-Haase/Sudoku/assets/96022576/cb05a5ae-a84e-4c14-90ab-63f9d41ca2bb)
+
 
 ## Dieses Projekt wurde für Lernzwecke erstellt um folgende Kentnisse zu erweitern:
 
