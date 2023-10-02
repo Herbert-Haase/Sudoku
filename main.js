@@ -58,7 +58,7 @@ function insertIntoGameTable(num, field) {
   let row = field.getAttribute("row");
   let col = field.getAttribute("col");
 
-  gameTable[row][col] = Number(num);
+  gameTable[row][col] = num;
 }
 
 function checkForSameNumber_RowCol(num, field) {
