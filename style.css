@@ -10,6 +10,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-flow: column;
 }
 
 #container {
@@ -41,4 +42,20 @@ div:focus {
 
 div.wrong {
   background-color: lightcoral;
+}
+
+button#reset,
+select {
+  width: 15vw;
+  padding: 5px;
+  border-radius: 0;
+  font-size: 20px;
+  font-weight: bolder;
+}
+button#reset:hover {
+  background-color: lightcoral;
+}
+
+select {
+  width: 8vw;
 }

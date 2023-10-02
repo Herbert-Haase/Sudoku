@@ -1,26 +1,13 @@
 let gameTable = [[], [], [], [], [], [], [], [], []];
 
-function randomNumbersPerCube(maxAmount = 5) {
-  // Create array of numbers to insert into cubes at the start of the game
-  let amount = Math.floor(Math.random() * (maxAmount - 1)) + 1;
-  let numbers = [];
-
-  for (let i = 0; i < amount; i++) {
-    numbers.push(Math.floor(Math.random() * 9) + 1);
-  }
-  return [...new Set(numbers)]; // Remove Duplicates
-}
-
-//let num = randomNumbersPerCube(9);
-
-function emptyTable() {
-  //empty DOM
+function resetTable() {
+  //reset DOM
   let fields = document.querySelectorAll("div[row]");
   fields.forEach((field) => {
     field.textContent = "";
   });
 
-  //empty gameTable
+  //reset gameTable
   gameTable = [[], [], [], [], [], [], [], [], []];
 }
 
@@ -106,4 +93,13 @@ function checkForSameNumber_Cube(num, field) {
   return duplicatesCube;
 }
 
-placeAtStart(9);
+function checkDifficulty() {
+  let select = document.querySelector("select");
+  let value = select.options[select.selectedIndex].getAttribute("value");
+  return Number(value);
+}
+
+document.querySelector("#reset").addEventListener("click", () => {
+  resetTable();
+  placeAtStart(checkDifficulty());
+});
