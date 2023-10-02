@@ -24,31 +24,34 @@ function emptyTable() {
   gameTable = [[], [], [], [], [], [], [], [], []];
 }
 
-// function placeAtStart(gameTable) {
-//let subarrays = [];
+function placeAtStart(amount) {
+  let cubes = document.querySelectorAll("div[cube]");
+  for (let cube of cubes) {
+    let amountOfNumbers = Math.floor(Math.random() * amount);
+    for (let i = 0; i < amountOfNumbers; i++) {
+      let locationOfNumber = Math.floor(Math.random() * 9);
+      let field = cube.children[locationOfNumber];
+      let num = Math.floor(Math.random() * 9) + 1;
 
-//   for (let i = 0; i < 9; i += 3) {
-//     for (let j = 0; j < 9; j += 3) {
-//       let subarray = [];
-
-//       for (let x = i; x < i + 3; x++) {
-//         for (let y = j; y < j + 3; y++) {
-//           subarray.push(gameTable[x][y]);
-//         }
-//       }
-
-//       subarrays.push(subarray);
-//     }
-//   }
-//   return subarrays;
-// }
+      insertIntoDOM(num, field);
+      insertIntoGameTable(num, field);
+      if (
+        checkForSameNumber_RowCol(num, field) ||
+        checkForSameNumber_Cube(num, field)
+      ) {
+        insertIntoDOM(undefined, field);
+        insertIntoGameTable(undefined, field);
+      }
+    }
+  }
+}
 
 let fields = document.querySelectorAll("div[row]");
 fields.forEach((field) => {
   field.addEventListener("keydown", (e) => {
     if (!isNaN(Number(e.key)) && !(e.key == 0)) {
-      insertIntoDOM(e.key, e.target);
-      insertIntoGameTable(e.key, e.target);
+      insertIntoDOM(Number(e.key), e.target);
+      insertIntoGameTable(Number(e.key), e.target);
       if (
         checkForSameNumber_RowCol(e.key, e.target) ||
         checkForSameNumber_Cube(e.key, e.target)
@@ -102,3 +105,5 @@ function checkForSameNumber_Cube(num, field) {
 
   return duplicatesCube;
 }
+
+placeAtStart(9);
