@@ -99,6 +99,8 @@ function checkDifficulty() {
   return Number(value);
 }
 
+placeAtStart(3);
+
 document.querySelector("#reset").addEventListener("click", () => {
   resetTable();
   placeAtStart(checkDifficulty());
