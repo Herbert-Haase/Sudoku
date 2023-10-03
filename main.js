@@ -1,49 +1,27 @@
 let gameTable = [[], [], [], [], [], [], [], [], []];
 
-document.querySelectorAll("div[row]").forEach((field) => {
-  field.addEventListener("keydown", (e) => {
-    if (!isNaN(Number(e.key)) && !(e.key == 0)) {
-      if (
-        checkForDuplicates_RowCol(e.key, e.target) ||
-        checkForDuplicates_Cube(e.key, e.target)
-      ) {
-        e.target.classList.add("wrong");
-      } else {
-        e.target.classList.remove("wrong");
-      }
-      insert(Number(e.key), e.target);
-    }
-  });
-});
+//Check for duplicate numbers in the same row/column and Cube
+let checkForDuplicates = {
+  rowCol(num, field) {
+    let row = field.getAttribute("row");
+    let col = field.getAttribute("col");
 
-function placeAtStart(amount) {
-  document.querySelectorAll("div[cube]").forEach((cube) => {
-    const amountOfNumbers = Math.floor(Math.random() * amount);
+    let rowValues = gameTable[row];
+    let colValues = gameTable.map((row) => row[col]);
 
-    for (let i = 0; i < amountOfNumbers; i++) {
-      const locationOfNumber = Math.floor(Math.random() * 9);
-      const field = cube.children[locationOfNumber];
-      const num = Math.floor(Math.random() * 9) + 1;
+    return rowValues.includes(Number(num)) || colValues.includes(Number(num));
+  },
 
-      if (
-        !(
-          checkForDuplicates_RowCol(num, field) ||
-          checkForDuplicates_Cube(num, field)
-        )
-      ) {
-        insert(num, field);
-      } else {
-        insert(undefined, field);
-      }
-    }
-  });
-}
-placeAtStart(checkDifficulty());
+  cube(num, field) {
+    let cube_html = field.parentElement.childNodes;
+    let cube_array = [...cube_html];
+    let cube_numbers = cube_array
+      .map((item) => Number(item.textContent))
+      .filter((item) => typeof item == "number" && item !== 0);
 
-document.querySelector("#reset").addEventListener("click", () => {
-  resetTable();
-  placeAtStart(checkDifficulty());
-});
+    return cube_numbers.includes(Number(num));
+  },
+};
 
 function checkDifficulty() {
   return Number(document.querySelector("select").value);
@@ -65,23 +43,52 @@ function insert(num, field) {
 
   gameTable[row][col] = num;
 }
+// Place random numbers at the start of the game
+function placeAtStart(amount) {
+  document.querySelectorAll("div[cube]").forEach((cube) => {
+    let amountOfNumbers = Math.floor(Math.random() * amount);
 
-function checkForDuplicates_RowCol(num, field) {
-  let row = field.getAttribute("row");
-  let col = field.getAttribute("col");
+    for (let i = 0; i < amountOfNumbers; i++) {
+      let locationOfNumber = Math.floor(Math.random() * 9);
+      let field = cube.children[locationOfNumber];
+      let num = Math.floor(Math.random() * 9) + 1;
 
-  let rowValues = gameTable[row];
-  let colValues = gameTable.map((row) => row[col]);
-
-  return rowValues.includes(Number(num)) || colValues.includes(Number(num));
+      if (
+        !(
+          checkForDuplicates.rowCol(num, field) ||
+          checkForDuplicates.cube(num, field)
+        )
+      ) {
+        insert(num, field);
+      } else {
+        insert(undefined, field);
+      }
+    }
+  });
 }
 
-function checkForDuplicates_Cube(num, field) {
-  let cube_html = field.parentElement.childNodes;
-  let cube_array = [...cube_html];
-  let cube_numbers = cube_array
-    .map((item) => Number(item.textContent))
-    .filter((item) => typeof item == "number" && item !== 0);
+// Add event listener for user input
+document.querySelectorAll("div[row]").forEach((field) => {
+  field.addEventListener("keydown", (e) => {
+    if (!isNaN(Number(e.key)) && !(e.key == 0)) {
+      if (
+        checkForDuplicates.rowCol(e.key, e.target) ||
+        checkForDuplicates.cube(e.key, e.target)
+      ) {
+        e.target.classList.add("wrong");
+      } else {
+        e.target.classList.remove("wrong");
+      }
+      insert(Number(e.key), e.target);
+    }
+  });
+});
 
-  return cube_numbers.includes(Number(num));
-}
+//Starting Difficulty (Once the site loads)
+placeAtStart(checkDifficulty());
+
+// Add event listener for reset button
+document.querySelector("#reset").addEventListener("click", () => {
+  resetTable();
+  placeAtStart(checkDifficulty());
+});
